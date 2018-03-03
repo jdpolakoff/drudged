@@ -2,29 +2,20 @@ var express = require('express');
 var request = require('request')
 var cheerio = require('cheerio')
 
-var url = 'http://www.drudgereport.com/'
+var url = 'http://www.drudgereportfeed.com/'
 
 request(url, function(err, resp, body){
     var $ = cheerio.load(body)
     var linkArray = []
 
-    var topStories = $('#app_topstories a')
-    $(topStories).each((i, story)=> {
-      var info1 = {
-        linkText: $(story).attr('href'),
-        linkHref: $(story).text()
-      }
-      linkArray.push(info1)
-    })
-
-    var links = $('a')
-    $(links).each(function(i, link){
-      console.log(i, $(link).text())
+    var stories = $('.story')
+    $(stories).each((i, story)=> {
       var info = {
-        linkText: $(link).text(),
-        linkHref: $(link).attr('href')
+        linkText: $(story).find('.story-headline').text(),
+        linkHref: $(story).find('a').attr('href'),
+        index: i
       }
       linkArray.push(info)
     })
-    return linkArray
-  })
+    console.log(linkArray)
+   })
